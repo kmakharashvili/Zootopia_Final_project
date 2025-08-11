@@ -21,6 +21,6 @@
   },
   "wrongLoginUser": {
     "email": "wronguser@test.com",
-    "password": "WrongPass123!"
+    "password": "WrongPass1234!"
   }
 }
