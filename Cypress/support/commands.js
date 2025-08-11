@@ -1,8 +1,8 @@
-// ავტორიზაცია - გამარტივებული კოდის ჩაწერა
-Cypress.Commands.add('login', (email, password) => {
-  cy.get('body > header > div > a.iprof > p').click();
-  cy.get('body > div.pop-box.avtorization.active > form > div:nth-child(5) > input').type(email);
-  cy.get('body > div.pop-box.avtorization.active > form > div:nth-child(6) > input').type(password);
-  cy.get('body > div.pop-box.avtorization.active > form > button').click();
-  cy.contains('მოგესალმებით').should('be.visible');
-});
+// ავტორიზაცია - 
+Cypress.Commands.add('login', (loginemail, password) => {
+    cy.get('.menu-pop > .rprof').click();
+    cy.get('.avtorization > .input-shablon > h2').should("contain","ავტორიზაცია");
+    cy.get(':nth-child(5) > .imail').type(loginemail);
+    cy.get('.ipass').type(password);
+    cy.get('.avtorization > .input-shablon > .form-button').click();
+})

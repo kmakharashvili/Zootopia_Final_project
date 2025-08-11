@@ -12,21 +12,47 @@ describe('Zootopia E2E Tests', () => {
   });
 
   it('რეგისტრაცია სწორ მონაცემებზე', () => {
-    cy.get('body > header > div > a.iprof').click();
-    cy.get('body > main > ul > li:nth-child(2) > a').click();
+    // პროფილის ღილაკზე კლიკი (force რადგან შესაძლოა იყოს დამალული)
+    cy.get('.menu-pop > .rprof', { timeout: 10000 })
+      .should('exist')
+      .click({ force: true });
 
-    cy.get('body > main > div.registration > form > div.reg-form-content > div.reg-form-left > div:nth-child(1) > input').type(users.validUser.firstName);
-    cy.get('body > main > div.registration > form > div.reg-form-content > div.reg-form-left > div:nth-child(2) > input').type(users.validUser.lastName);
-    cy.get('body > main > div.registration > form > div.reg-form-content > div.reg-form-left > div:nth-child(3) > input')
-      .type(users.validUser.email.replace('{{timestamp}}', Date.now()));
-    cy.get('body > main > div.registration > form > div.reg-form-content > div.reg-form-left > div:nth-child(4) > input').type(users.validUser.personalId);
-    cy.get('body > main > div.registration > form > div.reg-form-content > div.reg-form-left > div:nth-child(5) > input').type(users.validUser.phone);
-    cy.get('body > main > div.registration > form > div.reg-form-content > div.reg-form-left > div:nth-child(6) > input').type(users.validUser.password);
-    cy.get('body > main > div.registration > form > div.reg-gorm-foo.cart-form-item > label > p').click();
-    cy.contains('რეგისტრაცია').click();
+    // გადამოწმება რომ ჩანს ავტორიზაციის ტექსტი და გადავდივართ რეგისტრაციაზე
+    cy.get('.input-shablon > p')
+      .should('be.visible')
+      .and("contain", users.validUser.avtorizaciaargaq);
 
-    cy.contains('მომხმარებელი წარმატებით დარეგისტრირდა').should('be.visible');
-    cy.url().should('include', '/ka');  // მეორე Assertion
+    cy.get('.input-shablon > p > a')
+      .should('be.visible')
+      .click();
+
+    cy.get('.bred > :nth-child(2) > a')
+      .should('be.visible')
+      .and("contain", users.validUser.registracia);
+
+    // ვავსებთ ველებს
+    cy.get(':nth-child(1) > .ismile').type(users.validUser.firstName);
+    cy.get('.ipir').type(users.validUser.personalId);
+    cy.get(':nth-child(2) > .imail').type(users.validUser.email.replace('{{timestamp}}', Date.now()));
+    cy.get(':nth-child(4) > .itel').type(users.validUser.phone);
+    cy.get(':nth-child(5) > .ipass').type(users.validUser.password);
+    cy.get('.reg-form-left > :nth-child(6) > .ipass').type(users.validUser.password);
+
+    // პროფილის ტიპის არჩევა და პირობების დადასტურება
+    cy.get('[for="profile2"]').click({ force: true });
+    cy.get('label[for="etx"] svg').click({ force: true });
+
+    // რეგისტრაცია
+    cy.get('.regsub').click({ force: true });
+
+    // წარმატებული რეგისტრაციის შეტყობინება
+    cy.contains('მომხმარებელი წარმატებით დარეგისტრირდა', { timeout: 10000 }).should('be.visible');
+
+    // დაბრუნება მთავარ გვერდზე
+    cy.url().should('include', '/ka');
+
+    // პროფილის ღილაკზე ვალიდაცია რომ გამოჩნდა ახალი მომხმარებელი
+    cy.get('.menu-pop > .iprof').should('contain', users.validUser.firstName);
   });
 
   it('რეგისტრაცია არასწორი მონაცემებით (validation check)', () => {
@@ -39,7 +65,7 @@ describe('Zootopia E2E Tests', () => {
     cy.contains('რეგისტრაცია').click();
 
     cy.contains('გთხოვთ შეიყვანოთ ვალიდური მონაცემები').should('be.visible');
-    cy.url().should('include', '/registration'); // მეორე Assertion
+    cy.url().should('include', '/registration');
   });
 
   it('პროდუქტის კალათაში დამატება', () => {
@@ -53,7 +79,6 @@ describe('Zootopia E2E Tests', () => {
     cy.get('body > header > div > a.icart').click();
     cy.get('body > main > div.cart-box > div.swiper > div > div:nth-child(1) > div.spinner > button.plus.change-qty-by-one').click();
     cy.get('body > main > div.cart-box > div.swiper > div > div:nth-child(1) > div.spinner > button.minus.change-qty-by-one').click();
-    // Assertion: თუ მოცულობა დაბრუნდა პირვანდელზე
     cy.get('body > main > div.cart-box > div.swiper > div > div:nth-child(1) > div.spinner > input')
       .invoke('val')
       .then(val => expect(parseInt(val)).to.be.gte(1));
