@@ -1,0 +1,26 @@
+{
+  "validUser": {
+    "firstName": "კახაბერ",
+    "lastName": "მახარაშვილი",
+    "email": "k.makharashvili85@gmail.com",
+    "personalId": "010145874477",
+    "phone": "599599599599",
+    "password": "Ivnisi2025#$#"
+  },
+  "invalidUser": {
+    "firstName": "გ",
+    "lastName": "",
+    "email": "bademail",
+    "personalId": "",
+    "phone": "",
+    "password": ""
+  },
+  "loginUser": {
+    "email": "k.makharashvili85@gmail.com",
+    "password": "Ivnisi2025#$#"
+  },
+  "wrongLoginUser": {
+    "email": "wronguser@test.com",
+    "password": "WrongPass123!"
+  }
+}
